@@ -203,24 +203,28 @@ const AddCourses = () => {
       const imageUrl = await uploadImage({ data: data.image?.[0] });
 
       const payload = {
-        courseImage: imageUrl,
-        subjects: formSubjects,
-        goalCategory: data.goalCategory,
-        goal: data.goal,
-        courseCategoryId: data.courseCategoryId,
-        title: data.title,
-        count: data.count,
-        // description: data.description,
-        price: data.price,
-        duration: data.duration,
-        lessons: data.lessons,
-        weeks: data.weeks,
-        approvalStatus: 'approved',
-        courseType: 'Paid',
-        totalRating: data.totalRating,
-        language: data.language,
-        testSeries: selectedTestSeries?.map((item) => item.value) || [],
-      };
+  courseImage: imageUrl,
+  subjects: formSubjects,
+  goalCategory: data.goalCategory,
+  goal: data.goal,
+  courseCategoryId: data.courseCategoryId,
+  title: data.title,
+  count: data.count,
+  price:
+    data.price !== undefined &&
+    data.price !== null &&
+    data.price !== ""
+      ? Number(data.price)
+      : 0,
+  duration: data.duration,
+  lessons: data.lessons,
+  weeks: data.weeks,
+  approvalStatus: 'approved',
+  courseType: 'Paid',
+  totalRating: data.totalRating,
+  language: data.language,
+  testSeries: selectedTestSeries?.map((item) => item.value) || [],
+};
 
       if(data.semester){
         payload.semester = data.semester;
@@ -258,7 +262,7 @@ const AddCourses = () => {
           <div className="studentprofile-container">
             <div className="studyplanner-container">
               <div className="addhandwritten-inputs">
-                <div className="addhandwritten-input-two-div">
+                <div className="addhandwritten-inputs-div">
                   <div className="addhandwritten-input">
                     <h6>
                       Goal <span>*</span>
@@ -277,11 +281,11 @@ const AddCourses = () => {
                         </select>
                         <label htmlFor="">Select Goal</label>
                       </div>
-                      <div className="addhandwritten-inputs-icons">
-                        {/* <AiFillPlusCircle onClick={() => setShow(true)} />
+                      {/* <div className="addhandwritten-inputs-icons">
+                        <AiFillPlusCircle onClick={() => setShow(true)} />
                       <MdOutlineRemoveRedEye />
-                      <AiFillEdit /> */}
-                      </div>
+                      <AiFillEdit />
+                      </div> */}
                     </div>
                   </div>
                   <div className="addhandwritten-input">
@@ -300,7 +304,7 @@ const AddCourses = () => {
                         </select>
                         <label htmlFor="">Select Goal Exam</label>
                       </div>
-                      <div className="addhandwritten-inputs-icons"></div>
+                      {/* <div className="addhandwritten-inputs-icons"></div> */}
                     </div>
                   </div>
                 </div>
@@ -311,7 +315,7 @@ const AddCourses = () => {
                   setFormSubjects={setFormSubjects}
                 />
 
-                <div className="addhandwritten-input-two-div">
+                <div className="addhandwritten-inputs-div">
                   <div className="addhandwritten-input">
                     <h6>
                       Course Category<span>*</span>
@@ -328,7 +332,7 @@ const AddCourses = () => {
                         </select>
                         <label htmlFor="">Enter Course Category here</label>
                       </div>
-                      <div className="addhandwritten-inputs-icons"></div>
+                      {/* <div className="addhandwritten-inputs-icons"></div> */}
                     </div>
                   </div>
                   <div className="addhandwritten-input">
@@ -341,22 +345,22 @@ const AddCourses = () => {
                         />
                         <label htmlFor="">Enter Title here</label>
                       </div>
-                      <div className="addhandwritten-inputs-icons"></div>
+                      {/* <div className="addhandwritten-inputs-icons"></div> */}
                     </div>
                   </div>
                 </div>
                 <div className="addhandwritten-inputs-div">
                   <div className="addhandwritten-input">
-                    <h6>Price</h6>
+                    <h6>Price (Optional)</h6>
                     <div className="addhandwritten-inputs-div">
                       <div className="input-container">
                         <input
                           type="number"
-                          {...register('price', { required: true })}
+                          {...register('price')}
                         />
                         <label htmlFor="">Enter Price here</label>
                       </div>
-                      <div className="addhandwritten-inputs-icons"></div>
+                      {/* <div className="addhandwritten-inputs-icons"></div> */}
                     </div>
                   </div>
                   <div className="addhandwritten-input">
@@ -369,7 +373,7 @@ const AddCourses = () => {
                         />
                         <label htmlFor="">Enter Duration in text</label>
                       </div>
-                      <div className="addhandwritten-inputs-icons"></div>
+                      {/* <div className="addhandwritten-inputs-icons"></div> */}
                     </div>
                   </div>
                 </div>
@@ -384,7 +388,7 @@ const AddCourses = () => {
                         />
                         <label htmlFor="">Enter Lessons here</label>
                       </div>
-                      <div className="addhandwritten-inputs-icons"></div>
+                      {/* <div className="addhandwritten-inputs-icons"></div> */}
                     </div>
                   </div>
                   <div className="addhandwritten-input">
@@ -398,7 +402,7 @@ const AddCourses = () => {
                         />
                         <label htmlFor="">Enter Language Here</label>
                       </div>
-                      <div className="addhandwritten-inputs-icons"></div>
+                      {/* <div className="addhandwritten-inputs-icons"></div> */}
                     </div>
                   </div>
                   {/* <div className="addhandwritten-input">
@@ -411,7 +415,7 @@ const AddCourses = () => {
                         />
                         <label htmlFor="">Enter Weeks</label>
                       </div>
-                      <div className="addhandwritten-inputs-icons"></div>
+                      // <div className="addhandwritten-inputs-icons"></div>
                     </div>
                   </div> */}
                 </div>
@@ -429,7 +433,7 @@ const AddCourses = () => {
                         </select>
                         <label htmlFor="">Enter Course Type here</label>
                       </div>
-                      <div className="addhandwritten-inputs-icons"></div>
+                      // <div className="addhandwritten-inputs-icons"></div>
                     </div>
                   </div> */}
                   <div className="addhandwritten-input">
@@ -447,7 +451,7 @@ const AddCourses = () => {
                         />
                         <label htmlFor="">Enter Total Rating</label>
                       </div>
-                      <div className="addhandwritten-inputs-icons"></div>
+                      {/* <div className="addhandwritten-inputs-icons"></div> */}
                     </div>
                   </div>
                   <div className="addhandwritten-input">
@@ -460,32 +464,17 @@ const AddCourses = () => {
                         />
                         <label htmlFor="">Choose Image</label>
                       </div>
-                      <div className="addhandwritten-inputs-icons"></div>
+                      {/* <div className="addhandwritten-inputs-icons"></div> */}
                     </div>
                   </div>
                 </div>
                 <div className="addhandwritten-inputs-div">
-                  {/* <div className="addhandwritten-input">
-                    <h6>Count</h6>
-                    <div className="addhandwritten-inputs-div">
-                      <div className="input-container">
-                        <input
-                          type="number"
-                          {...register("count", { required: true })}
-                        />
-                        <label htmlFor="">Enter Count Here</label>
-                      </div>
-                      <div className="addhandwritten-inputs-icons"></div>
-                    </div>
-                  </div> */}
-                </div>
-                <div className="addhandwritten-inputs-div">
                   <div className="addhandwritten-input">
-                    <h6>Semester</h6>
+                    <h6>Semester (Optional)</h6>
                     <div className="addhandwritten-inputs-div">
                       <div className="input-container">
                         <select {...register('semester')} defaultValue="">
-                          <option value="">Select Semester (Optional)</option>
+                          <option value="">Select Semester</option>
                           {semesters?.data?.map((sem) => (
                             <option key={sem._id} value={sem._id}>
                               {sem.semesterNumber
@@ -498,6 +487,7 @@ const AddCourses = () => {
                       </div>
                     </div>
                   </div>
+                  <div className="addhandwritten-input"> </div>
                   {/* <div className="addhandwritten-input">
                     <h6>Course Description</h6>
                     <div className="addhandwritten-inputs-div">
@@ -508,7 +498,22 @@ const AddCourses = () => {
                         />
                         <label htmlFor="">Enter Description</label>
                       </div>
-                      <div className="addhandwritten-inputs-icons"></div>
+                      // <div className="addhandwritten-inputs-icons"></div>
+                    </div>
+                  </div> */}
+                </div>
+                <div className="addhandwritten-inputs-div">
+                  {/* <div className="addhandwritten-input">
+                    <h6>Count</h6>
+                    <div className="addhandwritten-inputs-div">
+                      <div className="input-container">
+                        <input
+                          type="number"
+                          {...register("count", { required: true })}
+                        />
+                        <label htmlFor="">Enter Count Here</label>
+                      </div>
+                      // <div className="addhandwritten-inputs-icons"></div>
                     </div>
                   </div> */}
                 </div>
@@ -533,7 +538,7 @@ const AddCourses = () => {
                     placeholder="Select Test Series"
                   />
                 </div>
-                <div className="addhandwritten-inputs-icons"></div>
+                // <div className="addhandwritten-inputs-icons"></div>
               </div>
             </div> */}
             <div className="addhandwritennotes-submit">

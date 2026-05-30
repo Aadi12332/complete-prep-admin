@@ -44,10 +44,7 @@ const AddVod = () => {
   const [testSeries, setTestSeries] = useState([]);
   const [semesters, setSemesters] = useState([]);
 
-  useEffect(() => {
-    getGoalCategory({ setIsLoading, setData, params: { limit: 1000 } });
-    getAllSemstersCommon({ setIsLoading, setData: setSemesters });
-  }, []);
+
 
   const goalCategory = watch("goalCategory");
 
@@ -83,6 +80,25 @@ const AddVod = () => {
       getAllSubjects({ setIsLoading, setData: setSubject, params });
     }
   }, [goalExamId]);
+
+      useEffect(() => {
+    if (goalExamId && goalCategory) {
+      getAllSemstersCommon({
+        setIsLoading,
+        setData: setSemesters,
+        params: {
+          limit: 1000,
+          goalCategory: goalCategory,
+          goal: goalExamId,
+        },
+      });
+    }
+  }, [goalCategory, goalExamId]);
+
+  useEffect(() => {
+    getGoalCategory({ setIsLoading, setData, params: { limit: 1000 } });
+    // getAllSemstersCommon({ setIsLoading, setData: setSemesters });
+  }, []);
 
   const subjectId = watch("subject");
 

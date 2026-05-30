@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from "react";
-import HOC from "../../components/HOC/HOC";
-import Pagination from "../../components/Pagination/Pagination";
-import { Link, useNavigate } from "react-router-dom";
-import { GiPayMoney } from "react-icons/gi";
+import React, { useEffect, useState } from 'react';
+import HOC from '../../components/HOC/HOC';
+import Pagination from '../../components/Pagination/Pagination';
+import { Link, useNavigate } from 'react-router-dom';
+import { GiPayMoney } from 'react-icons/gi';
 import {
   HiMiniArrowTrendingUp,
   HiMiniArrowTrendingDown,
-} from "react-icons/hi2";
-import { FaUserGraduate } from "react-icons/fa6";
-import { FiEdit3 } from "react-icons/fi";
-import { AiOutlineDelete } from "react-icons/ai";
-import { FaPlus } from "react-icons/fa6";
-import { IoSearch } from "react-icons/io5";
-import { MdArrowOutward } from "react-icons/md";
-import { getAllPayments } from "../../services/exportFunctions";
-import { courseTypeName, generateCsv } from "../../services/exportComponents";
+} from 'react-icons/hi2';
+import { FaUserGraduate } from 'react-icons/fa6';
+import { FiEdit3 } from 'react-icons/fi';
+import { AiOutlineDelete } from 'react-icons/ai';
+import { FaPlus } from 'react-icons/fa6';
+import { IoSearch } from 'react-icons/io5';
+import { MdArrowOutward } from 'react-icons/md';
+import { getAllPayments } from '../../services/exportFunctions';
+import { courseTypeName, generateCsv } from '../../services/exportComponents';
 
 const Payments = () => {
   const navigate = useNavigate();
@@ -23,14 +23,14 @@ const Payments = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
 
   const handleLimitChange = (newLimit) => {
-    console.log("Limit per Page:", newLimit);
+    console.log('Limit per Page:', newLimit);
     setLimit(newLimit);
   };
 
@@ -72,7 +72,13 @@ const Payments = () => {
                 <div className="payments-div-left">
                   <h6>Total Income</h6>
                   <h3>
-                    ₹ {data?.transactions?.reduce((a, b) => a + b.finalAmount, 0)|| 0}
+                    ₹{' '}
+                    {(
+                      data?.transactions?.reduce(
+                        (sum, item) => sum + Number(item.finalAmount || 0),
+                        0
+                      ) || 0
+                    ).toFixed(2)}
                   </h3>
                 </div>
                 <div className="payments-div-right">
@@ -109,7 +115,7 @@ const Payments = () => {
               <div className="payments-div-top">
                 <div className="payments-div-left">
                   <h6>Total Transactions</h6>
-                  <h3>{data?.transactions?.length||0}</h3>
+                  <h3>{data?.transactions?.length || 0}</h3>
                 </div>
                 <div className="payments-div-right user">
                   <FaUserGraduate />
@@ -145,18 +151,18 @@ const Payments = () => {
                   onClick={() =>
                     generateCsv(
                       [
-                        "User Name",
-                        "Payment Mode",
-                        "Purchased Course",
-                        "Price",
-                        "Payment ID",
+                        'User Name',
+                        'Payment Mode',
+                        'Purchased Course',
+                        'Price',
+                        'Payment ID',
                       ],
                       data?.transactions?.map((item) => [
-                        item.user?.fullName || "",
-                        item.paymentMode || "",
+                        item.user?.fullName || '',
+                        item.paymentMode || '',
                         courseTypeName(item),
                         item.finalAmount || 0,
-                        item.transactionId || "",
+                        item.transactionId || '',
                       ]),
                       `Payment List-${currentPage}.csv`
                     )
@@ -183,11 +189,11 @@ const Payments = () => {
                   {filteredTransactions?.map((transaction, index) => {
                     return (
                       <tr key={index}>
-                        <td>{transaction.user?.fullName || ""}</td>
-                        <td>{transaction.paymentMode || ""}</td>
+                        <td>{transaction.user?.fullName || ''}</td>
+                        <td>{transaction.paymentMode || ''}</td>
                         <td>{courseTypeName(transaction)}</td>
-                        <td>{transaction.finalAmount || ""}</td>
-                        <td>{transaction.transactionId || ""}</td>
+                        <td>{transaction.finalAmount || ''}</td>
+                        <td>{transaction.transactionId || ''}</td>
                         {/* <td>
                           <div className="handwrittennotes-table-icons">
                             <div className="handwrittennotes-icon">

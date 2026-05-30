@@ -47,6 +47,7 @@ const Sidebar = () => {
     { name: "Topics", icon: <FiBookOpen />, link: "/topics" },
     { name: "Videos", icon: <RiVideoLine />, link: "/vods" },
     { name: "Course Type", icon: <CgNotes />, link: "/course-type" },
+    { name: "Add Course Content", icon: <CgNotes />, link: "/dashboard/course-page/courses/add-course" },
     { name: "Payment", icon: <FaRegMoneyBill1 />, link: "/payments" },
     { name: "Quiz app", icon: <MdOutlineQuiz />, link: "/quizapp" },
     // { name: "University", icon: <MdOutlineQuiz />, link: "/university" },
@@ -119,7 +120,7 @@ const Sidebar = () => {
               isActive ? "sideitemactive" : "sideitem"
             }
           >
-            {item.icon}
+            <span className="min-w-8 w-8">{item.icon}</span>
             <p>{item.name}</p>
           </NavLink>
         ))}

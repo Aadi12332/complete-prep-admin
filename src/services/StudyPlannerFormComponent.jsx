@@ -162,39 +162,43 @@ const FormComponent = ({ goalCategory, goalExamId, setFormSubjects }) => {
   };
 
   return (
-    <form style={{ width: "90%" }} onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       {subjectFields.map((subject, subjectIndex) => (
         <div key={subject.id}>
-          <button
-            type="button"
-            onClick={() => removeSubject(subjectIndex)}
-            style={{ marginRight: "5px", marginBottom: "20px" }}
-          >
-            ❌
-          </button>
-          <div className="input-container">
-            <select
-              {...register(`subjects[${subjectIndex}].subjectId`, {
-                required: true,
-              })}
-              onChange={(e) =>
-                handleFieldChange(
-                  subjectIndex,
-                  null,
-                  null,
-                  "subjectId",
-                  e.target.value
-                )
-              }
+          
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <div className="input-container">
+              <select
+                {...register(`subjects[${subjectIndex}].subjectId`, {
+                  required: true,
+                })}
+                onChange={(e) =>
+                  handleFieldChange(
+                    subjectIndex,
+                    null,
+                    null,
+                    "subjectId",
+                    e.target.value
+                  )
+                }
+              >
+                <option value="">Select Subject</option>
+                {subjectOptions?.map((option) => (
+                  <option key={option._id} value={option._id}>
+                    {option.name}
+                  </option>
+                ))}
+              </select>
+              <label>Select Subject</label>
+            </div>
+            <button
+              type="button"
+              
+              style={{border: "2px solid gray", background: "white", borderRadius: 8, fontSize: "16px", cursor: "pointer", width: 61, height:61}}
+              onClick={() => removeSubject(subjectIndex)}
             >
-              <option value="">Select Subject</option>
-              {subjectOptions?.map((option) => (
-                <option key={option._id} value={option._id}>
-                  {option.name}
-                </option>
-              ))}
-            </select>
-            <label>Select Subject</label>
+              ❌
+            </button>
           </div>
 
           {/* Pass the whole chapterOptions object */}
@@ -210,13 +214,13 @@ const FormComponent = ({ goalCategory, goalExamId, setFormSubjects }) => {
         </div>
       ))}
 
-      <button type="button" onClick={() => appendSubject({ subSubjects: [] })}>
+      <button type="button" className="custom-btn" onClick={() => appendSubject({ subSubjects: [] })}>
         Add Subject
       </button>
-
-      <button type="button" onClick={handleSubmit(onSubmit)}>
+      <br />  
+      {/* <button type="button" className="custom-btn" onClick={handleSubmit(onSubmit)}>
         Submit
-      </button>
+      </button> */}
     </form>
   );
 };
@@ -243,14 +247,8 @@ const SubSubjectArray = ({
     <div className="mt-4 mb-2">
       {subFields.map((sub, subIndex) => (
         <div key={sub.id}>
-          <button
-            type="button"
-            onClick={() => removeSub(subIndex)}
-            style={{ marginRight: "5px", marginBottom: "10px" }}
-          >
-            ❌
-          </button>
-          <div className="input-container mt-4 mb-2">
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <div className="input-container mt-2 mb-2">
             <select
               {...register(
                 `subjects[${subjectIndex}].subSubjects[${subIndex}].subSubjectId`
@@ -274,6 +272,15 @@ const SubSubjectArray = ({
             </select>
             <label>Select SubSubject</label>
           </div>
+          <button
+            type="button"
+            onClick={() => removeSub(subIndex)}
+              
+              style={{border: "2px solid gray", background: "white", borderRadius: 8, fontSize: "16px", cursor: "pointer", width: 61, height:61}}
+          >
+            ❌
+          </button>
+          </div>
 
           <ChapterArray
             control={control}
@@ -291,7 +298,7 @@ const SubSubjectArray = ({
           />
         </div>
       ))}
-      <button type="button" onClick={() => appendSub({ chapters: [] })}>
+      <button type="button" className="custom-btn" onClick={() => appendSub({ chapters: [] })}>
         Add SubSubject
       </button>
     </div>
@@ -320,14 +327,8 @@ const ChapterArray = ({
     <div className="mt-4 mb-2">
       {chapterFields.map((chapter, chapterIndex) => (
         <div key={chapter.id}>
-          <button
-            type="button"
-            onClick={() => removeChapter(chapterIndex)}
-            style={{ marginRight: "5px", marginBottom: "10px" }}
-          >
-            ❌
-          </button>
-          <div className="input-container">
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <div className="input-container mt-2 mb-2">
             <select
               {...register(
                 `subjects[${subjectIndex}].subSubjects[${subIndex}].chapters[${chapterIndex}].chapterId`
@@ -351,6 +352,15 @@ const ChapterArray = ({
             </select>
             <label>Select Chapter</label>
           </div>
+          <button
+            type="button"
+            onClick={() => removeChapter(chapterIndex)}
+              
+              style={{border: "2px solid gray", background: "white", borderRadius: 8, fontSize: "16px", cursor: "pointer", width: 61, height:61}}
+          >
+            ❌
+          </button>
+          </div>
 
           <TopicArray
             control={control}
@@ -363,7 +373,7 @@ const ChapterArray = ({
           />
         </div>
       ))}
-      <button type="button" onClick={() => appendChapter({ topics: [] })}>
+      <button type="button" className="custom-btn" onClick={() => appendChapter({ topics: [] })}>
         Add Chapter
       </button>
     </div>
@@ -394,14 +404,8 @@ const TopicArray = ({
     <div className="mt-4 mb-2">
       {topicFields.map((topic, topicIndex) => (
         <div key={topic.id} className="mt-3">
-          <button
-            type="button"
-            onClick={() => removeTopic(topicIndex)}
-            style={{ marginRight: "5px", marginBottom: "10px" }}
-          >
-            ❌
-          </button>
-          <div className="input-container">
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <div className="input-container mt-2 mb-2">
             <select
               {...register(
                 `subjects[${subjectIndex}].subSubjects[${subIndex}].chapters[${chapterIndex}].topics[${topicIndex}].topicId`
@@ -425,10 +429,18 @@ const TopicArray = ({
             </select>
             <label>Select Topic</label>
           </div>
+          <button
+            type="button"
+            onClick={() => removeTopic(topicIndex)}
+              style={{border: "2px solid gray", background: "white", borderRadius: 8, fontSize: "16px", cursor: "pointer", width: 61, height:61}}
+          >
+            ❌
+          </button>
+          </div>
         </div>
       ))}
       <button
-        className="mt-2 mb-2"
+        className="custom-btn"
         type="button"
         onClick={() => appendTopic({})}
       >
