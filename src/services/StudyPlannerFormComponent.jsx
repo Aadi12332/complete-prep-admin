@@ -8,14 +8,16 @@ import {
   getAllVideos,
 } from "./exportFunctions";
 
-const FormComponent = ({ goalCategory, goalExamId, setFormSubjects }) => {
+const FormComponent = ({ goalCategory, goalExamId, setFormSubjects,semesterId }) => {
   const [subjectOptions, setSubjectOptions] = useState([]);
   const [subSubjectOptions, setSubSubjectOptions] = useState({});
   const [chapterOptions, setChapterOptions] = useState({});
   const [topicOptions, setTopicOptions] = useState({});
   const [videosData, setVideosData] = useState({});
 
-  const { register, handleSubmit, control } = useForm();
+  const { register, handleSubmit, control,watch } = useForm();
+const subjectsData = watch("subjects");
+
   const {
     fields: subjectFields,
     append: appendSubject,
@@ -28,8 +30,9 @@ const FormComponent = ({ goalCategory, goalExamId, setFormSubjects }) => {
   useEffect(() => {
     if (goalExamId) {
       const params = {
-        goalCategory,
+        goalCategoryId:goalCategory,
         goalId: goalExamId,
+        semesterId:semesterId,
         page: 1,
         limit: 100,
         search: "",
@@ -42,7 +45,7 @@ const FormComponent = ({ goalCategory, goalExamId, setFormSubjects }) => {
         params,
       });
     }
-  }, [goalExamId, goalCategory]);
+  }, [goalExamId, goalCategory,semesterId]);
 
   const handleFieldChange = (
     subjectIndex,
@@ -160,12 +163,57 @@ const FormComponent = ({ goalCategory, goalExamId, setFormSubjects }) => {
 
     setFormSubjects(formattedData);
   };
+useEffect(() => {
+  if (!subjectsData?.length) return;
+
+  const allTopicsLoaded = subjectsData.every((subject) =>
+    subject?.subSubjects?.every((sub) =>
+      sub?.chapters?.every((chapter) =>
+        chapter?.topics?.every(
+          (topic) => !topic?.topicId || videosData[topic.topicId]
+        )
+      )
+    )
+  );
+
+  if (!allTopicsLoaded) return;
+
+  const formattedData = subjectsData.map((subject) => ({
+    subject: subject.subjectId,
+    subSubjects: subject.subSubjects?.map((sub) => ({
+      ...(sub.subSubjectId && {
+        subSubject: sub.subSubjectId,
+      }),
+      chapters: sub.chapters?.map((chapter) => ({
+        chapter: chapter.chapterId,
+        topics: chapter.topics?.map((topic) => {
+          const videoDetails = videosData[topic.topicId] || {};
+
+          return {
+            topic: topic.topicId,
+            courseVideos: videoDetails.courseVideos || [],
+            handwrittenNotes: videoDetails.handwrittenNotes || [],
+            educatorNotes: videoDetails.educatorNotes || [],
+            practiceQuestions: videoDetails.practiceQuestions || [],
+            previousYearQuestions:
+              videoDetails.previousYearQuestions || [],
+            testSeries: videoDetails.testSeries
+              ? [videoDetails.testSeries]
+              : [],
+            teacher: videoDetails.teacher || null,
+          };
+        }),
+      })),
+    })),
+  }));
+
+  setFormSubjects(formattedData);
+}, [subjectsData, videosData]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       {subjectFields.map((subject, subjectIndex) => (
         <div key={subject.id}>
-          
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <div className="input-container">
               <select
@@ -193,7 +241,6 @@ const FormComponent = ({ goalCategory, goalExamId, setFormSubjects }) => {
             </div>
             <button
               type="button"
-              
               style={{border: "2px solid gray", background: "white", borderRadius: 8, fontSize: "16px", cursor: "pointer", width: 61, height:61}}
               onClick={() => removeSubject(subjectIndex)}
             >
@@ -201,7 +248,6 @@ const FormComponent = ({ goalCategory, goalExamId, setFormSubjects }) => {
             </button>
           </div>
 
-          {/* Pass the whole chapterOptions object */}
           <SubSubjectArray
             control={control}
             register={register}
@@ -218,7 +264,7 @@ const FormComponent = ({ goalCategory, goalExamId, setFormSubjects }) => {
         Add Subject
       </button>
       <br />  
-      {/* <button type="button" className="custom-btn" onClick={handleSubmit(onSubmit)}>
+      {/* <button type="button" className="custom-btn mt-2" onClick={handleSubmit(onSubmit)}>
         Submit
       </button> */}
     </form>
@@ -402,24 +448,27 @@ const TopicArray = ({
 
   return (
     <div className="mt-4 mb-2">
-      {topicFields.map((topic, topicIndex) => (
+      {topicFields.map((topic, topicIndex) => {
+        const topicRegister = register(
+  `subjects[${subjectIndex}].subSubjects[${subIndex}].chapters[${chapterIndex}].topics[${topicIndex}].topicId`
+);
+        return(
         <div key={topic.id} className="mt-3">
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <div className="input-container mt-2 mb-2">
-            <select
-              {...register(
-                `subjects[${subjectIndex}].subSubjects[${subIndex}].chapters[${chapterIndex}].topics[${topicIndex}].topicId`
-              )}
-              onChange={(e) =>
-                handleFieldChange(
-                  subjectIndex,
-                  subIndex,
-                  chapterIndex,
-                  "topicId",
-                  e.target.value
-                )
-              }
-            >
+           <select
+  {...topicRegister}
+  onChange={(e) => {
+    topicRegister.onChange(e);
+    handleFieldChange(
+      subjectIndex,
+      subIndex,
+      chapterIndex,
+      "topicId",
+      e.target.value
+    );
+  }}
+>
               <option value="">Select Topic</option>
               {topicOptions[uniqueKey]?.map((topic) => (
                 <option key={topic._id} value={topic._id}>
@@ -438,7 +487,7 @@ const TopicArray = ({
           </button>
           </div>
         </div>
-      ))}
+      )})}
       <button
         className="custom-btn"
         type="button"

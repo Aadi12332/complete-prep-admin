@@ -27,7 +27,7 @@ const AddCourses = () => {
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
 
-  const { register, handleSubmit, watch, reset, setValue } = useForm();
+  const { register, handleSubmit, watch, reset, setValue, control,getValues } = useForm();
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [goalExam, setGoalExam] = useState([]);
@@ -45,7 +45,6 @@ const AddCourses = () => {
   const [formSubjects, setFormSubjects] = useState([]);
   const [testSeries, setTestSeries] = useState([]);
   const [testSeriesSearch, setTestSeriesSearch] = useState('');
-
   const [semesters, setSemesters] = useState([]);
   const fetchTestSeries = async (inputValue) => {
     try {
@@ -94,6 +93,7 @@ const AddCourses = () => {
   }, [goalCategory]);
 
   const goalExamId = watch('goal');
+  const watchSemester = watch("semester");
 
   useEffect(() => {
     if (goalExamId) {
@@ -101,12 +101,13 @@ const AddCourses = () => {
         page: 1,
         limit: 100,
         search: '',
-        goalCategory,
+        goalCategoryId:goalCategory,
         goalId: goalExamId,
+        semesterId:watchSemester
       };
       getAllSubjects({ setIsLoading, setData: setSubject, params });
     }
-  }, [goalExamId]);
+  }, [goalExamId,watchSemester]);
 
   const subjectId = watch('subject');
 
@@ -183,12 +184,11 @@ const AddCourses = () => {
       params: { limit: 3000 },
     });
   }, []);
-
   useEffect(() => {
       if(goalExamId && goalCategory){
         getAllSemstersCommon({ setIsLoading, setData: setSemesters ,params:{limit:1000,goalCategory:goalCategory,goal:goalExamId}});
       }
-    }, [goalCategory,goalExamId]);
+    }, [goalCategory,goalExamId,watchSemester]);
 
   const onSubmit = async (data) => {
     if (!data.image) {
@@ -309,10 +309,46 @@ const AddCourses = () => {
                   </div>
                 </div>
 
+                 <div className="addhandwritten-inputs-div">
+                  <div className="addhandwritten-input">
+                    <h6>Semester <span>*</span></h6>
+                    <div className="addhandwritten-inputs-div">
+                      <div className="input-container">
+                        <select {...register('semester')} defaultValue="">
+                          <option value="">Select Semester</option>
+                          {semesters?.data?.map((sem) => (
+                            <option key={sem._id} value={sem._id}>
+                              {sem.semesterNumber
+                                ? `Semester ${sem.semesterNumber}`
+                                : sem.name || sem._id}
+                            </option>
+                          ))}
+                        </select>
+                        <label htmlFor="">Select</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="addhandwritten-input"> </div>
+                  {/* <div className="addhandwritten-input">
+                    <h6>Course Description</h6>
+                    <div className="addhandwritten-inputs-div">
+                      <div className="input-container">
+                        <input
+                          type="text"
+                          {...register("description", { required: true })}
+                        />
+                        <label htmlFor="">Enter Description</label>
+                      </div>
+                      // <div className="addhandwritten-inputs-icons"></div>
+                    </div>
+                  </div> */}
+                </div>
+
                 <FormComponent
                   goalCategory={goalCategory}
                   goalExamId={goalExamId}
                   setFormSubjects={setFormSubjects}
+                  semesterId={watchSemester}
                 />
 
                 <div className="addhandwritten-inputs-div">
@@ -468,40 +504,7 @@ const AddCourses = () => {
                     </div>
                   </div>
                 </div>
-                <div className="addhandwritten-inputs-div">
-                  <div className="addhandwritten-input">
-                    <h6>Semester (Optional)</h6>
-                    <div className="addhandwritten-inputs-div">
-                      <div className="input-container">
-                        <select {...register('semester')} defaultValue="">
-                          <option value="">Select Semester</option>
-                          {semesters?.data?.map((sem) => (
-                            <option key={sem._id} value={sem._id}>
-                              {sem.semesterNumber
-                                ? `Semester ${sem.semesterNumber}`
-                                : sem.name || sem._id}
-                            </option>
-                          ))}
-                        </select>
-                        <label htmlFor="">Select</label>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="addhandwritten-input"> </div>
-                  {/* <div className="addhandwritten-input">
-                    <h6>Course Description</h6>
-                    <div className="addhandwritten-inputs-div">
-                      <div className="input-container">
-                        <input
-                          type="text"
-                          {...register("description", { required: true })}
-                        />
-                        <label htmlFor="">Enter Description</label>
-                      </div>
-                      // <div className="addhandwritten-inputs-icons"></div>
-                    </div>
-                  </div> */}
-                </div>
+               
                 <div className="addhandwritten-inputs-div">
                   {/* <div className="addhandwritten-input">
                     <h6>Count</h6>

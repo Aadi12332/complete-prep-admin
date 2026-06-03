@@ -50,18 +50,20 @@ const AddTopic = () => {
 
   const goalExamId = watch("goal");
 
+const watchSemester=watch("semester");
   useEffect(() => {
     if (goalExamId) {
       const params = {
         page: 1,
         limit: 1000,
         search: "",
-        goalCategory,
+        goalCategoryId:goalCategory,
         goalId: goalExamId,
+        semesterId:watchSemester
       };
       getAllSubjects({ setIsLoading, setData: setSubject, params });
     }
-  }, [goalExamId]);
+  }, [goalExamId, goalCategory,watchSemester]);
 
   const subjectId = watch("subject");
 
@@ -180,6 +182,24 @@ const AddTopic = () => {
                   </div>
                 </div>
                 <div className="addhandwritten-input-two-div">
+                   <div className="addhandwritten-input" style={{gap:12}}>
+                    <h6>Semester<span>*</span></h6>
+                    <div className="addhandwritten-inputs-div">
+                      <div className="input-container">
+                        <select {...register("semester")} defaultValue="">
+                          <option value="">Select Semester</option>
+                          {semesters?.data?.map((sem) => (
+                            <option key={sem._id} value={sem._id}>
+                              {sem.semesterNumber
+                                ? `Semester ${sem.semesterNumber}`
+                                : sem.name || sem._id}
+                            </option>
+                          ))}
+                        </select>
+                        {/* <label htmlFor="">Select Semester</label> */}
+                      </div>
+                    </div>
+                  </div>
                   <div className="addhandwritten-input" style={{gap:12}}>
                     <h6>
                       Subject<span>*</span>
@@ -199,7 +219,10 @@ const AddTopic = () => {
                       {/* <div className="addhandwritten-inputs-icons"></div> */}
                     </div>
                   </div>
-                  <div className="addhandwritten-input" style={{gap:12}}>
+                 
+                </div>
+                <div className="addhandwritten-input-two-div">
+                   <div className="addhandwritten-input" style={{gap:12}}>
                     <h6>Sub Subjects (Optional)</h6>
                     <div className="addhandwritten-inputs-div">
                       <div className="input-container">
@@ -216,8 +239,6 @@ const AddTopic = () => {
                       {/* <div className="addhandwritten-inputs-icons"></div> */}
                     </div>
                   </div>
-                </div>
-                <div className="addhandwritten-input-two-div">
                   <div className="addhandwritten-input" style={{gap:12}}>
                     <h6>
                       Chapter <span>*</span>
@@ -237,6 +258,9 @@ const AddTopic = () => {
                       {/* <div className="addhandwritten-inputs-icons"></div> */}
                     </div>
                   </div>
+                </div>
+                <div className="addhandwritten-input-two-div">
+                 
                   <div className="addhandwritten-input" style={{gap:12}}>
                     <h6>Topic Name</h6>
                     <div className="addhandwritten-inputs-div">
@@ -248,26 +272,6 @@ const AddTopic = () => {
                         {/* <label htmlFor="">Enter Topic Name</label> */}
                       </div>
                       {/* <div className="addhandwritten-inputs-icons"></div> */}
-                    </div>
-                  </div>
-                </div>
-                <div className="addhandwritten-input-two-div">
-                  <div className="addhandwritten-input" style={{gap:12}}>
-                    <h6>Semester (Optional)</h6>
-                    <div className="addhandwritten-inputs-div">
-                      <div className="input-container">
-                        <select {...register("semester")} defaultValue="">
-                          <option value="">Select Semester</option>
-                          {semesters?.data?.map((sem) => (
-                            <option key={sem._id} value={sem._id}>
-                              {sem.semesterNumber
-                                ? `Semester ${sem.semesterNumber}`
-                                : sem.name || sem._id}
-                            </option>
-                          ))}
-                        </select>
-                        {/* <label htmlFor="">Select Semester</label> */}
-                      </div>
                     </div>
                   </div>
                   <div className="addhandwritten-input" style={{gap:12}}>

@@ -62,6 +62,8 @@ const AddVod = () => {
 
   const goalExamId = watch("goal");
 
+const watchSemester=watch("semester");
+
   useEffect(() => {
     if (goalExamId) {
       const params = {
@@ -71,15 +73,23 @@ const AddVod = () => {
         goalCategory,
         goalId: goalExamId,
       };
+       const paramsSub = {
+        page: 1,
+           limit: 1000,
+        search: "",
+        goalCategoryId:goalCategory,
+        goalId: goalExamId,
+        semesterId:watchSemester
+      };
       getAllTestSeries({ setIsLoading, setData: setTestSeries, params });
       getAllPracticeQuestions({
         setIsLoading,
         setData: setPracticeQuestions,
         params,
       });
-      getAllSubjects({ setIsLoading, setData: setSubject, params });
+      getAllSubjects({ setIsLoading, setData: setSubject, params: paramsSub });
     }
-  }, [goalExamId]);
+  }, [goalExamId, goalCategory,watchSemester]);
 
       useEffect(() => {
     if (goalExamId && goalCategory) {
@@ -238,6 +248,25 @@ const AddVod = () => {
                   </div>
                 </div>
                 <div className="addhandwritten-input-two-div">
+                   <div className="addhandwritten-input" style={{gap: "12px"}}>
+                    <h6>Semester<span>*</span></h6>
+                    <div className="addhandwritten-inputs-div">
+                      <div className="input-container">
+                        <select {...register("semester")} defaultValue="">
+                          <option value="">Select Semester</option>
+                          {semesters?.data?.map((sem) => (
+                            <option key={sem._id} value={sem._id}>
+                              {sem.semesterNumber
+                                ? `Semester ${sem.semesterNumber}`
+                                : sem.name || sem._id}
+                            </option>
+                          ))}
+                        </select>
+                        {/* <label htmlFor="">Select Semester</label> */}
+                      </div>
+                      {/* <div className="addhandwritten-inputs-icons"></div> */}
+                    </div>
+                  </div>
                   <div className="addhandwritten-input" style={{gap: "12px"}}>
                     <h6>
                       Subject<span>*</span>
@@ -257,6 +286,8 @@ const AddVod = () => {
                       {/* <div className="addhandwritten-inputs-icons"></div> */}
                     </div>
                   </div>
+                </div>
+                <div className="addhandwritten-input-two-div">
                   <div className="addhandwritten-input" style={{gap: "12px"}}>
                     <h6>Sub Subjects (Optional)</h6>
                     <div className="addhandwritten-inputs-div">
@@ -274,8 +305,6 @@ const AddVod = () => {
                       {/* <div className="addhandwritten-inputs-icons"></div> */}
                     </div>
                   </div>
-                </div>
-                <div className="addhandwritten-input-two-div">
                   <div className="addhandwritten-input" style={{gap: "12px"}}>
                     <h6>
                       Chapter<span>*</span>
@@ -295,6 +324,8 @@ const AddVod = () => {
                       {/* <div className="addhandwritten-inputs-icons"></div> */}
                     </div>
                   </div>
+                </div>
+                <div className="addhandwritten-input-two-div">
                   <div className="addhandwritten-input" style={{gap: "12px"}}>
                     <h6>
                       Topic<span>*</span>
@@ -314,8 +345,6 @@ const AddVod = () => {
                       {/* <div className="addhandwritten-inputs-icons"></div> */}
                     </div>
                   </div>
-                </div>
-                <div className="addhandwritten-input-two-div">
                   <div className="addhandwritten-input" style={{gap: "12px"}}>
                     <h6>
                       Video Name<span>*</span>
@@ -331,6 +360,8 @@ const AddVod = () => {
                       {/* <div className="addhandwritten-inputs-icons"></div> */}
                     </div>
                   </div>
+                </div>
+                <div className="addhandwritten-input-two-div">
                   <div className="addhandwritten-input" style={{gap: "12px"}}>
                     <h6>
                       Duration of the Video<span>*</span>
@@ -346,8 +377,6 @@ const AddVod = () => {
                       {/* <div className="addhandwritten-inputs-icons"></div> */}
                     </div>
                   </div>
-                </div>
-                <div className="addhandwritten-input-two-div">
                   <div className="addhandwritten-input" style={{gap: "12px"}}>
                     <h6>
                       Video Link<span>*</span>
@@ -363,6 +392,8 @@ const AddVod = () => {
                       {/* <div className="addhandwritten-inputs-icons"></div> */}
                     </div>
                   </div>
+                </div>
+                <div className="addhandwritten-input-two-div">
                   <div className="addhandwritten-input" style={{gap: "12px"}}>
                     <h6>Handwritten Notes (Optional)</h6>
                     <div className="addhandwritten-inputs-div">
@@ -380,8 +411,6 @@ const AddVod = () => {
                       {/* <div className="addhandwritten-inputs-icons"></div> */}
                     </div>
                   </div>
-                </div>
-                <div className="addhandwritten-input-two-div">
                   <div className="addhandwritten-input" style={{gap: "12px"}}>
                     <h6>
                       Educator Name (Optional)
@@ -401,6 +430,8 @@ const AddVod = () => {
                       {/* <div className="addhandwritten-inputs-icons"></div> */}
                     </div>
                   </div>
+                </div>
+                <div className="addhandwritten-input-two-div">
                   <div className="addhandwritten-input" style={{gap: "12px"}}>
                     <h6>
                       Educator Notes (Optional)
@@ -416,8 +447,6 @@ const AddVod = () => {
                       {/* <div className="addhandwritten-inputs-icons"></div> */}
                     </div>
                   </div>
-                </div>
-                <div className="addhandwritten-input-two-div">
                   <div className="addhandwritten-input" style={{gap: "12px"}}>
                     <h6>
                       Test Series (Optional)
@@ -437,25 +466,7 @@ const AddVod = () => {
                       {/* <div className="addhandwritten-inputs-icons"></div> */}
                     </div>
                   </div>
-                   <div className="addhandwritten-input" style={{gap: "12px"}}>
-                    <h6>Semester (Optional)</h6>
-                    <div className="addhandwritten-inputs-div">
-                      <div className="input-container">
-                        <select {...register("semester")} defaultValue="">
-                          <option value="">Select Semester</option>
-                          {semesters?.data?.map((sem) => (
-                            <option key={sem._id} value={sem._id}>
-                              {sem.semesterNumber
-                                ? `Semester ${sem.semesterNumber}`
-                                : sem.name || sem._id}
-                            </option>
-                          ))}
-                        </select>
-                        {/* <label htmlFor="">Select Semester</label> */}
-                      </div>
-                      {/* <div className="addhandwritten-inputs-icons"></div> */}
-                    </div>
-                  </div>
+                  
                 </div>
               </div>
             </div>

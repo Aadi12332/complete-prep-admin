@@ -18,7 +18,7 @@ import {
 const AddSubSubjects = () => {
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
-  const { register, handleSubmit, watch } = useForm();
+  const { register, handleSubmit, watch,getValues } = useForm();
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [allGoals, setAllGoals] = useState([]);
@@ -44,19 +44,21 @@ const AddSubSubjects = () => {
   }, [goalCategory]);
 
   const goalExamId = watch("goal");
-
+  
+const watchSemester=watch("semester");
   useEffect(() => {
     if (goalExamId) {
       const params = {
         page: 1,
         limit: 1000,
         search: "",
-        goalCategory,
+        goalCategoryId:goalCategory,
         goalId: goalExamId,
+        semesterId:watchSemester
       };
       getAllSubjects({ setIsLoading, setData: setSubject, params });
     }
-  }, [goalExamId, goalCategory]);
+  }, [goalExamId, goalCategory,watchSemester]);
 
   useEffect(() => {
     if(goalExamId && goalCategory){
@@ -137,7 +139,25 @@ const AddSubSubjects = () => {
                   </div>
                </div>
 
-                <div className="addhandwritten-input-two-div">
+               <div className="addhandwritten-input-two-div">
+                  <div className="addhandwritten-input" style={{gap:12}}>
+                    <h6>Semester <span>*</span></h6>
+                    <div className="addhandwritten-inputs-div">
+                      <div className="input-container">
+                        <select {...register("semester")} defaultValue="">
+                          <option value="">Select Semester</option>
+                          {semesters?.data?.map((sem) => (
+                            <option key={sem._id} value={sem._id}>
+                              {sem.semesterNumber
+                                ? `Semester ${sem.semesterNumber}`
+                                : sem.name || sem._id}
+                            </option>
+                          ))}
+                        </select>
+                        {/* <label htmlFor="">Select</label> */}
+                      </div>
+                    </div>
+                  </div>
                   <div className="addhandwritten-input" style={{gap:12}}>
                     <h6>
                       Subject<span>*</span>
@@ -153,6 +173,10 @@ const AddSubSubjects = () => {
                       </select>
                     </div>
                   </div>
+                </div>
+
+                <div className="addhandwritten-input-two-div">
+                  
                   <div className="addhandwritten-input" style={{gap:12}}>
                     <h6>
                       Sub-Subject Name<span>*</span>
@@ -172,26 +196,7 @@ const AddSubSubjects = () => {
 
              
 
-                <div className="addhandwritten-input-two-div">
-                  <div className="addhandwritten-input" style={{gap:12}}>
-                    <h6>Semester</h6>
-                    <div className="addhandwritten-inputs-div">
-                      <div className="input-container">
-                        <select {...register("semester")} defaultValue="">
-                          <option value="">Select Semester (Optional)</option>
-                          {semesters?.data?.map((sem) => (
-                            <option key={sem._id} value={sem._id}>
-                              {sem.semesterNumber
-                                ? `Semester ${sem.semesterNumber}`
-                                : sem.name || sem._id}
-                            </option>
-                          ))}
-                        </select>
-                        {/* <label htmlFor="">Select</label> */}
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                
               </div>
             </div>
 

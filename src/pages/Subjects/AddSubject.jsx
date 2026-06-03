@@ -181,24 +181,6 @@ const AddSubject = () => {
                 <div className="addhandwritten-input-two-div">
                   <div className="addhandwritten-input" style={{ gap: 12 }}>
                     <h6>
-                      Subject Name<span>*</span>
-                    </h6>
-
-                    <div className="addhandwritten-inputs-div">
-                      <div
-                        className="input-container"
-                        style={{ width: "100%" }}
-                      >
-                        <input
-                          type="text"
-                          {...register("name", { required: true })}
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="addhandwritten-input" style={{ gap: 12 }}>
-                    <h6>
                       Semester <span>*</span>
                     </h6>
 
@@ -221,6 +203,24 @@ const AddSubject = () => {
                       </div>
                     </div>
                   </div>
+                  <div className="addhandwritten-input" style={{ gap: 12 }}>
+                    <h6>
+                      Subject Name<span>*</span>
+                    </h6>
+
+                    <div className="addhandwritten-inputs-div">
+                      <div
+                        className="input-container"
+                        style={{ width: "100%" }}
+                      >
+                        <input
+                          type="text"
+                          {...register("name", { required: true })}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
 
                 <div className="addhandwritten-input-two-div">
